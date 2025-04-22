@@ -75,3 +75,7 @@ class PDS:
             float: Valor do erro quadrático médio entre x e y.
         """
         return np.mean((x - y) ** 2)
+
+    # em construção
+    def h_media_movel(M):
+        return np.ones(M + 1) / (M + 1)
