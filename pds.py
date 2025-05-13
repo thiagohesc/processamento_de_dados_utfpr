@@ -20,7 +20,7 @@ class PDS:
         return float(1 * (n == 0))
 
     @staticmethod
-    def u(n: int) -> float:
+    def u(n: float) -> float:
         """
         Retorna 1.0 se n for maior ou igual a 0, caso contrário retorna 0.0.
         Implementa a função degrau unitário discreta.
@@ -31,7 +31,7 @@ class PDS:
         Returns:
             float: 1.0 se n >= 0, senão 0.0.
         """
-        return float(n >= 0)
+        return np.where(n >= 0, 1.0, 0.0)
 
     @staticmethod
     def eqdif(b: list, a: list, x: list | np.ndarray) -> np.ndarray:
@@ -79,3 +79,21 @@ class PDS:
     # em construção
     def h_media_movel(M):
         return np.ones(M + 1) / (M + 1)
+
+    @staticmethod
+    def sinc2(n, wc):
+        clist = [n != 0, n == 0]
+        flist = [lambda n: np.sin(wc * n) / (np.pi * n), (wc / np.pi)]
+        x = np.piecewise(n.astype(float), clist, flist)
+        return x
+
+    @staticmethod
+    def dtft(n, x, w=np.linspace(-np.pi, np.pi, 1024)):
+        K = len(w)
+        X = np.zeros(K, dtype=complex)
+        N = len(x)
+
+        for k in range(K):
+            for i in range(N):
+                X[k] += x[i] * np.exp(-1j * w[k] * n[i])
+        return w, X
